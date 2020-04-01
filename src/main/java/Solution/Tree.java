@@ -1,9 +1,13 @@
+package Solution;
+
+import Parser.*;
+import where.arguments.ToleranceRange;
+
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class Tree {
-    private  Parser lex;
+    private Parser lex;
     private ArrayList<String> separatedByComma(String str) throws ParseException {
         StringBuilder arg = new StringBuilder();
         ArrayList<String> argsList = new ArrayList<>();
@@ -76,7 +80,23 @@ public class Tree {
     }
 
     private String whereT(String selectArgs){
-        return "";
+        if(!lex.hasNextToken()) {
+            throw  new IllegalArgumentException("Wrong Expression");
+        }
+        lex.nextToken();
+        StringBuilder ans = new StringBuilder();
+        ToleranceRange rav = new ToleranceRange(lex.tokenStr());
+        ans.append("find(").append(rav.toString()).append(selectArgs).append(")");
+        if(lex.hasNextToken()) {
+            Token curToken = lex.nextToken();
+            if(curToken == Token.SKIP){
+                ans.append('.').append(skipT());
+            } else {
+                ans.append('.').append(limitT());
+
+            }
+        }
+        return ans.toString();
     }
 
     private String limitT(){
@@ -94,6 +114,7 @@ public class Tree {
             throw  new IllegalArgumentException("Wrong Expression");
         }
         return ans.toString();
+
     }
 
     private String skipT(){

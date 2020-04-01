@@ -1,3 +1,5 @@
+package Parser;
+
 public enum Token {
     EXPRESSION,
     ARGUMENT,

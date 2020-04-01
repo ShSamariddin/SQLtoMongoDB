@@ -1,3 +1,4 @@
+package Parser;
 
 public class Parser {
     private final String sql;
@@ -9,16 +10,16 @@ public class Parser {
     private String strToken;
 
 
-    Parser(final String sql) {
+    public Parser(final String sql) {
         this.sql = sql;
     }
 
     private boolean isLegalCharacterForSelect(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '-' || c == '_' || c == '"' || c == '*');
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '-' || c == '_' || c == '\"' || c == '*' || c == '\'');
     }
 
     private boolean isLegalCharacterForFrom(char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '"');
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || (c == '\"' || c =='\'');
     }
 
     private boolean isLegalCharacterForSkipOrLimit(char c){
@@ -27,7 +28,7 @@ public class Parser {
 
     private boolean isLegalCharacterForWhere(char c){
         return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')
-                || (c == '"' || c == '>' || c == '<' || c == '=');
+                || (c == '\"' || c == '>' || c == '<' || c == '='|| c == '_' || c == '\'');
     }
 
     private boolean isBlank(char c) {
@@ -134,13 +135,11 @@ public class Parser {
             while (position < sql.length()
                     && ((position + 5 > sql.length() || !sql.substring(position, position + 5).equals("LIMIT"))
                     || (position + 4 > sql.length() || !sql.substring(position, position + 4).equals("SKIP")))) {
-                if (!isBlank(sql.charAt(position))) {
-                    if(isLegalCharacterForWhere(sql.charAt(position))) {
-                        ans.append(sql.charAt(position));
-                    } else{
-                        throw  new IllegalArgumentException();
+                if (isBlank(sql.charAt(position)) || isLegalCharacterForWhere(sql.charAt(position))) {
+                    ans.append(sql.charAt(position));
+                } else {
+                    throw  new IllegalArgumentException();
                     }
-                }
                 position++;
             }
             strToken = ans.toString();

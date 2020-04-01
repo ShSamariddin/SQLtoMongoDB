@@ -1,3 +1,4 @@
+import Solution.Tree;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -21,6 +22,17 @@ public class ParserTest {
         try {
             Tree tree = new Tree();
             String str = new String(tree.sol(sql));
+            assertEquals(mongoDB, tree.sol(sql));
+        } catch (Exception  e){
+            e.printStackTrace();
+        }
+
+        sql = "SELECT * FROM customers WHERE age > 22 AND name = 'Vasya'";
+        mongoDB = "db.customers.find({age: {$gt: 22}, name: 'Vasya'})";
+        try {
+            Tree tree = new Tree();
+            String str = tree.sol(sql);
+            System.out.println(str);
             assertEquals(mongoDB, tree.sol(sql));
         } catch (Exception  e){
             e.printStackTrace();
