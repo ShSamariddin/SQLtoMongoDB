@@ -1,5 +1,3 @@
-package FROM;
-
 public class FromArgument {
     String arg;
 
@@ -8,6 +6,6 @@ public class FromArgument {
     }
 
     public  String toString(){
-        return arg;
+        return  arg;
     }
 }

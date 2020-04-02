@@ -1,13 +1,11 @@
-import FROM.FromArgument;
-import Parser.*;
-import SELECT.SelectArguments;
-import WHERE.ToleranceRange;
+import parser.*;
+import where.ToleranceRange;
 
 
 import java.util.HashMap;
 
 public class Converter {
-    private Parser lex;
+    private  Parser lex;
     HashMap<Token, String> ma = new HashMap<Token, String>();
 
     private void isInteger(String str) {

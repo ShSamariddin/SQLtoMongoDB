@@ -1,6 +1,6 @@
-package Parser;
+package parser;
 
-import static Parser.Token.*;
+import static parser.Token.*;
 
 public class Parser {
     private final String sql;
@@ -30,16 +30,6 @@ public class Parser {
         }
     }
 
-    private String curStrToken() {
-        StringBuilder select = new StringBuilder();
-        skipWhitespace();
-        while (position < sql.length() && !isBlank(sql.charAt(position))) {
-            select.append(sql.charAt(position));
-            position++;
-        }
-        skipWhitespace();
-        return select.toString();
-    }
 
     private  String whereArg(){
         skipWhitespace();
@@ -77,7 +67,8 @@ public class Parser {
         skipWhitespace();
         switch (token) {
             case START:
-                String strToken = curStrToken();
+                String strToken = strArgument();
+//                String[] splitPart = sql.split("SELECT", 2);
                 if (!strToken.equals("SELECT")) {
                     throw new IllegalArgumentException("");
                 } else if (!hasNextToken()) {
@@ -87,7 +78,7 @@ public class Parser {
                 token = SELECT;
                 break;
             case SELECT:
-                strToken = curStrToken();
+                strToken = strArgument();
                 if (!strToken.equals("FROM")) {
                     throw new IllegalArgumentException();
                 } else if (!hasNextToken()) {
@@ -97,7 +88,7 @@ public class Parser {
                 token = FROM;
                 break;
             default:
-                strToken = curStrToken();
+                strToken = strArgument();
                 if (strToken.equals("WHERE") && !hasLimitToken && !hasSkipToken && hasNextToken()) {
                     token = WHERE;
                     tokenArg = whereArg();

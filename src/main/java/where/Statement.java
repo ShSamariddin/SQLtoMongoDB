@@ -1,6 +1,6 @@
-package WHERE;
+package where;
 
-import Parser.Var;
+import parser.Var;
 
 
 public class Statement {

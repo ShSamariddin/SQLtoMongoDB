@@ -10,8 +10,8 @@ public class ParserTest {
         String mongoDB = "db.sales.find({}).limit(10)";
         try {
             Converter converter = new Converter();
-            String str = new String(converter.sol(sql));
-            assertEquals(mongoDB, converter.sol(sql));
+            String str = new String(converter.convertToMongoDB(sql));
+            assertEquals(mongoDB, converter.convertToMongoDB(sql));
         } catch (Exception  e){
             e.printStackTrace();
         }
@@ -20,8 +20,8 @@ public class ParserTest {
         mongoDB = "db.collection.find({}, {name: 1, surname: 1})";
         try {
             Converter converter = new Converter();
-            String str = new String(converter.sol(sql));
-            assertEquals(mongoDB, converter.sol(sql));
+            String str = new String(converter.convertToMongoDB(sql));
+            assertEquals(mongoDB, converter.convertToMongoDB(sql));
         } catch (Exception  e){
             e.printStackTrace();
         }
@@ -30,8 +30,8 @@ public class ParserTest {
         mongoDB = "db.customers.find({age: {$gt: 22}, name: 'Vasya'})";
         try {
             Converter converter = new Converter();
-            String str = converter.sol(sql);
-            assertEquals(mongoDB, converter.sol(sql));
+            String str = converter.convertToMongoDB(sql);
+            assertEquals(mongoDB, converter.convertToMongoDB(sql));
         } catch (Exception  e){
             e.printStackTrace();
         }
@@ -40,8 +40,8 @@ public class ParserTest {
         mongoDB = "db.collection.find({}).skip(5).limit(10)";
         try {
             Converter converter = new Converter();
-            String str = new String(converter.sol(sql));
-            assertEquals(mongoDB, converter.sol(sql));
+            String str = new String(converter.convertToMongoDB(sql));
+            assertEquals(mongoDB, converter.convertToMongoDB(sql));
         } catch (Exception  e){
             e.printStackTrace();
         }

@@ -1,7 +1,7 @@
-package Parser;
+package parser;
 
 public class Var {
-    private  String arg;
+    private final  String arg;
     public Var(String var){
         if(!isValidVariable(var)){
             throw new IllegalArgumentException("unsupported characters in variables");

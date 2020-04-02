@@ -1,11 +1,11 @@
-package WHERE;
+package where;
 
-import Parser.Var;
+import parser.Var;
 
 import java.util.ArrayList;
 
 public class ToleranceRange {
-    private ArrayList<Statement> argumentList = new ArrayList<>();
+    private final ArrayList<Statement> argumentList = new ArrayList<>();
 
     public ToleranceRange(String row) {
         StringBuilder statement = new StringBuilder();

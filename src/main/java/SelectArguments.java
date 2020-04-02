@@ -1,5 +1,3 @@
-package SELECT;
-
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -11,7 +9,7 @@ public class SelectArguments {
     }
 
     private boolean isLegalCharacter(char c) {
-        return (c == '\'' || c == '\"' || c == '-' || c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'));
+        return (c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
     }
 
     private String checkCharacter(String str) {
