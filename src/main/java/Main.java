@@ -1,5 +1,3 @@
-import Solution.Tree;
-
 import java.util.Scanner;
 
 public class Main {
@@ -17,8 +15,8 @@ public class Main {
             sql.append(input.nextLine());
         }
         try {
-            Tree tree = new Tree();
-            System.out.println(tree.sol(sql.toString()));
+            Converter converter = new Converter();
+            System.out.println(converter.convertToMongoDB(sql.toString()));
         } catch (Exception  e){
             e.printStackTrace();
         }

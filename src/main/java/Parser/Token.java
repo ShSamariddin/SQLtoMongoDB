@@ -1,10 +1,9 @@
 package Parser;
 
 public enum Token {
-    EXPRESSION,
+    START,
     ARGUMENT,
     SELECT,
-    NUMBER,
     FROM,
     WHERE,
     SKIP,

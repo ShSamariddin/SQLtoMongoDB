@@ -4,7 +4,7 @@ public class Var {
     private  String arg;
     public Var(String var){
         if(!isValidVariable(var)){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("unsupported characters in variables");
         }
         this.arg = var;
     }

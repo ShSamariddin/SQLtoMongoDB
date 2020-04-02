@@ -1,4 +1,4 @@
-package where.arguments;
+package WHERE;
 
 import Parser.Var;
 

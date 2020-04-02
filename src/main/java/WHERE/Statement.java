@@ -1,4 +1,4 @@
-package where.arguments;
+package WHERE;
 
 import Parser.Var;
 
@@ -11,7 +11,7 @@ public class Statement {
     Statement(Var left, String operation, Var right) {
         if (!operation.equals(">") && !operation.equals("<")
                 && !operation.equals("=") && !operation.equals("<>")) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("unsupported mark in WHERE");
         }
         this.left = left;
         this.right = right;
