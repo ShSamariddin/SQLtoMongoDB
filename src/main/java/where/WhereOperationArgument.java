@@ -4,14 +4,14 @@ import parser.Var;
 
 import java.util.ArrayList;
 
-public class ToleranceRange {
+public class WhereOperationArgument {
     private final ArrayList<Statement> argumentList = new ArrayList<>();
 
-    public ToleranceRange(String row) {
+    public WhereOperationArgument(String row) {
         StringBuilder statement = new StringBuilder();
-        ArrayList<String> arg = new ArrayList<String>();
+        ArrayList<String> arg = new ArrayList<>();
         for (char c : row.toCharArray()) {
-            if (!isBlank(c)) {
+            if (!Character.isWhitespace(c)) {
                 statement.append(c);
             } else {
                 if (statement.length() != 0) {
@@ -55,7 +55,5 @@ public class ToleranceRange {
         return ans.toString();
     }
 
-    private boolean isBlank(char c) {
-        return (c == ' ' || c == '\r' || c == '\n' || c == '\t');
-    }
+
 }

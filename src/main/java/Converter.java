@@ -1,20 +1,12 @@
 import parser.*;
-import where.ToleranceRange;
+import where.WhereOperationArgument;
 
 
 import java.util.HashMap;
 
 public class Converter {
     private  Parser lex;
-    HashMap<Token, String> ma = new HashMap<Token, String>();
-
-    private void isInteger(String str) {
-        for (char c : str.toCharArray()) {
-            if (c < '0' || c > '9') {
-                throw new IllegalArgumentException("LIMIT or SKIP arguments isn't Integer");
-            }
-        }
-    }
+    HashMap<Token, String> ma = new HashMap<>();
 
     private void addToHashMap(){
         while (lex.hasNextToken()) {
@@ -22,23 +14,23 @@ public class Converter {
             String tokenArgument = lex.tokenArgument();
             switch (curToken) {
                 case SELECT:
-                    SelectArguments select = new SelectArguments(tokenArgument);
+                    SelectOperationArguments select = new SelectOperationArguments(tokenArgument);
                     ma.put(curToken, select.toString());
                     break;
                 case FROM:
-                    FromArgument from = new FromArgument(tokenArgument);
+                    FromOperationArgument from = new FromOperationArgument(tokenArgument);
                     ma.put(curToken, from.toString());
                     break;
                 case WHERE:
-                    ToleranceRange where = new ToleranceRange(tokenArgument);
+                    WhereOperationArgument where = new WhereOperationArgument(tokenArgument);
                     ma.put(curToken, where.toString());
                     break;
                 case LIMIT:
-                    isInteger(tokenArgument);
+                    Integer.parseInt(tokenArgument);
                     ma.put(curToken, ".limit(" + tokenArgument + ")");
                     break;
                 case SKIP:
-                    isInteger(tokenArgument);
+                    Integer.parseInt(tokenArgument);
                     ma.put(curToken, ".skip(" + tokenArgument + ')');
                     break;
             }

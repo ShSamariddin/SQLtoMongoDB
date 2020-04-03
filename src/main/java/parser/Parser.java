@@ -15,9 +15,6 @@ public class Parser {
         this.sql = sql;
     }
 
-    private boolean isBlank(char c) {
-        return (c == ' ' || c == '\r' || c == '\n' || c == '\t');
-    }
 
     public boolean hasNextToken() {
         skipWhitespace();
@@ -25,29 +22,30 @@ public class Parser {
     }
 
     private void skipWhitespace() {
-        while (position < sql.length() && isBlank(sql.charAt(position))) {
+        while (position < sql.length() && Character.isWhitespace(sql.charAt(position))) {
             position++;
         }
     }
 
 
-    private  String whereArg(){
+    private String whereArg() {
         skipWhitespace();
         StringBuilder ans = new StringBuilder();
         while (position < sql.length()
                 && ((position + 5 > sql.length() || !sql.substring(position, position + 5).equals("LIMIT"))
-                || (position + 4 > sql.length() || !sql.substring(position, position + 4).equals("SKIP")))) {
-                ans.append(sql.charAt(position));
+                && (position + 4 > sql.length() || !sql.substring(position, position + 4).equals("SKIP")))) {
+            ans.append(sql.charAt(position));
             position++;
         }
         return ans.toString();
     }
 
+
     private String strArgument() {
         StringBuilder ans = new StringBuilder();
         while (true) {
             skipWhitespace();
-            while (position < sql.length() && !isBlank(sql.charAt(position))
+            while (position < sql.length() && !Character.isWhitespace(sql.charAt(position))
                     && sql.charAt(position) != ',') {
                 ans.append(sql.charAt(position));
                 position++;
@@ -63,32 +61,29 @@ public class Parser {
         return ans.toString();
     }
 
+    private void check(String strToken, String token) {
+        if (!strToken.equals(token)) {
+            throw new IllegalArgumentException(token);
+        } else if (!hasNextToken()) {
+            throw new IllegalArgumentException(token + " has no arguments");
+        }
+    }
+
     public Token nextToken() {
         skipWhitespace();
         switch (token) {
             case START:
-                String strToken = strArgument();
-//                String[] splitPart = sql.split("SELECT", 2);
-                if (!strToken.equals("SELECT")) {
-                    throw new IllegalArgumentException("");
-                } else if (!hasNextToken()) {
-                    throw new IllegalArgumentException("SELECT has no arguments");
-                }
+                check(strArgument(), "SELECT");
                 tokenArg = strArgument();
                 token = SELECT;
                 break;
             case SELECT:
-                strToken = strArgument();
-                if (!strToken.equals("FROM")) {
-                    throw new IllegalArgumentException();
-                } else if (!hasNextToken()) {
-                    throw new IllegalArgumentException("FROM has no argument");
-                }
+                check(strArgument(), "FROM");
                 tokenArg = strArgument();
                 token = FROM;
                 break;
             default:
-                strToken = strArgument();
+                String strToken = strArgument();
                 if (strToken.equals("WHERE") && !hasLimitToken && !hasSkipToken && hasNextToken()) {
                     token = WHERE;
                     tokenArg = whereArg();
@@ -105,14 +100,6 @@ public class Parser {
                 }
         }
         return token;
-    }
-
-    public Token curToken() {
-        return token;
-    }
-
-    public Integer curPosition() {
-        return position;
     }
 
     public String tokenArgument() {
