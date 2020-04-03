@@ -1,3 +1,13 @@
+/**
+ * Enum  Wrapper
+ * <p>
+ * Author: Sharipov Samariddin
+ * <p>
+ * <p>
+ * Purpose: Класс перечисление, типов оберток. Обертка это специальные символы в которых
+ * заключены называние колонок и таблиц которые совпадают с SQL операторами
+ */
+
 public enum Wrapper {
     SQUARE_BRACKETS {
         @Override

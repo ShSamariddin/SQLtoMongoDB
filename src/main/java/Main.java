@@ -12,8 +12,8 @@ public class Main {
             sql.append(input.nextLine());
         }
         try {
-            Converter converter = new Converter();
-            System.out.println(converter.convertToMongoDB(sql.toString()));
+            Converter converter = new Converter(sql.toString());
+            System.out.println(converter.convertToMongoDB());
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,12 +2,19 @@ package parser;
 
 import static parser.Token.*;
 
+/**
+ * CLass Parser
+ * <p>
+ * Author: Sharipov Samariddin
+ * <p>
+ * Purpose: SQL Parser
+ */
 public class Parser {
     private final String sql;
     private Integer position = 0;
     private Token token = START;
     private String tokenArg;
-    private boolean hasSkipToken = false;
+    private boolean hasOffsetToken = false;
     private boolean hasLimitToken = false;
 
 
@@ -28,20 +35,27 @@ public class Parser {
     }
 
 
+    /**
+     * Purpose: Возвращает условные выражение оператора WHERE
+     */
     private String whereArg() {
         skipWhitespace();
         StringBuilder ans = new StringBuilder();
         while (position < sql.length()
                 && ((position + 5 > sql.length() || !sql.substring(position, position + 5).equals("LIMIT"))
-                && (position + 4 > sql.length() || !sql.substring(position, position + 4).equals("SKIP")))) {
+                && (position + 6 > sql.length() || !sql.substring(position, position + 6).equals("OFFSET")))) {
             ans.append(sql.charAt(position));
             position++;
         }
         return ans.toString();
     }
 
-
-    private String strArgument() {
+    /**
+     * Purpose: Возвращает аргумент текущего токена
+     *
+     * @return
+     */
+    private String argumentParser() {
         StringBuilder ans = new StringBuilder();
         while (true) {
             skipWhitespace();
@@ -61,7 +75,14 @@ public class Parser {
         return ans.toString();
     }
 
-    private void check(String strToken, String token) {
+    /**
+     * Purpose: Проверяет валидность токена
+     *
+     * @param strToken
+     * @param token
+     * @throws IllegalArgumentException
+     */
+    private void check(String strToken, String token) throws IllegalArgumentException {
         if (!strToken.equals(token)) {
             throw new IllegalArgumentException(token);
         } else if (!hasNextToken()) {
@@ -69,32 +90,37 @@ public class Parser {
         }
     }
 
-    public Token nextToken() {
+    /**
+     * Purpose: Возвращает следующий токен и сохраняет его аргумент
+     *
+     * @throws IllegalArgumentException
+     */
+    public Token nextToken() throws IllegalArgumentException {
         skipWhitespace();
         switch (token) {
             case START:
-                check(strArgument(), "SELECT");
-                tokenArg = strArgument();
+                check(argumentParser(), "SELECT");
+                tokenArg = argumentParser();
                 token = SELECT;
                 break;
             case SELECT:
-                check(strArgument(), "FROM");
-                tokenArg = strArgument();
+                check(argumentParser(), "FROM");
+                tokenArg = argumentParser();
                 token = FROM;
                 break;
             default:
-                String strToken = strArgument();
-                if (strToken.equals("WHERE") && !hasLimitToken && !hasSkipToken && hasNextToken()) {
+                String strToken = argumentParser();
+                if (strToken.equals("WHERE") && !hasLimitToken && !hasOffsetToken && hasNextToken()) {
                     token = WHERE;
                     tokenArg = whereArg();
                 } else if (strToken.equals("LIMIT") && hasNextToken()) {
                     token = LIMIT;
-                    tokenArg = strArgument();
+                    tokenArg = argumentParser();
                     hasLimitToken = true;
-                } else if (strToken.equals("SKIP") && hasNextToken()) {
-                    token = SKIP;
-                    tokenArg = strArgument();
-                    hasSkipToken = true;
+                } else if (strToken.equals("OFFSET") && hasNextToken()) {
+                    token = OFFSET;
+                    tokenArg = argumentParser();
+                    hasOffsetToken = true;
                 } else {
                     throw new IllegalArgumentException();
                 }
@@ -102,6 +128,9 @@ public class Parser {
         return token;
     }
 
+    /**
+     * Purpose: Возвращает аргумент текущего токена
+     */
     public String tokenArgument() {
         return tokenArg;
     }

@@ -1,9 +1,19 @@
+/**
+ * CLass OperationArguments
+ * <p>
+ * Author: Sharipov Samariddin
+ * <p>
+ * Purpose: Класс для хранения  аргументов FROM и SELECT
+ */
 public class OperationArguments {
-    protected boolean isLegalCharacter(char c) {
-        return (c == '_' || (c >= 'a' && c <= 'z')
-                || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
-    }
 
+
+    /**
+     * Purpose: Удаляет обертку аргумента
+     *
+     * @param str
+     * @return Возвращает аргумент без обертки
+     */
     protected String removeWrapper(String str) {
         StringBuilder arg = new StringBuilder(str);
         if (arg.length() <= 2) {
@@ -19,12 +29,4 @@ public class OperationArguments {
         return arg.toString();
     }
 
-    protected String checkCharacter(String str) {
-        for (char c : str.toCharArray()) {
-            if (!isLegalCharacter(c)) {
-                throw new IllegalArgumentException("SELECT arguments has Illegal character");
-            }
-        }
-        return str;
-    }
 }

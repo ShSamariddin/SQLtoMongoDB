@@ -1,29 +1,46 @@
+import parser.Var;
+
 import java.util.ArrayList;
 
+/**
+ * CLass SelectOperationArguments
+ * <p>
+ * Author: Sharipov Samariddin
+ * <p>
+ * Purpose: Класс для хранения  аргументов оператора SELECT
+ */
+
 public class SelectOperationArguments extends OperationArguments {
-    ArrayList<String> listArguments = new ArrayList<>();
-
-    public SelectOperationArguments(String args) {
-        separatedByComma(args);
-    }
+    ArrayList<Var> listArguments = new ArrayList<>();
 
 
-    private void separatedByComma(String str) {
-        String[] argList = str.split(",");
+    /**
+     * Purpose: Разделяет запятыми и хранит все аргументы в ArrayList
+     *
+     * @param args
+     * @throws IllegalArgumentException
+     */
+    public SelectOperationArguments(String args) throws IllegalArgumentException {
+        String[] argList = args.split(",");
         if (argList.length > 1 || (argList.length == 1 && !argList[0].equals("*"))) {
             for (String s : argList) {
-                listArguments.add(checkCharacter(removeWrapper(s)));
+                listArguments.add(new Var(removeWrapper(s)));
             }
         }
     }
 
-    public String toString() {
+    /**
+     * Purpose: Преврщает аргументы в MongoDB формат
+     *
+     * @return Возвращает аргументы в виде MongoDB формате
+     */
+    public String toMongoDB() {
         StringBuilder ans = new StringBuilder();
 
         if (listArguments.size() != 0) {
             ans.append(", {");
-            for (String arg : listArguments) {
-                ans.append(arg).append(": 1, ");
+            for (Var arg : listArguments) {
+                ans.append(arg.toString()).append(": 1, ");
             }
             ans.deleteCharAt(ans.length() - 1);
             ans.deleteCharAt(ans.length() - 1);

@@ -4,16 +4,25 @@ import parser.Var;
 
 import static where.Operation.*;
 
+/**
+ * CLass Statement
+ * <p>
+ * Author: Sharipov Samariddin
+ * <p>
+ * Purpose: Класс для хранения условного выражение из оператора WHERE
+ */
 
 public class Statement {
     private final Var left;
     private final Var right;
     private Operation operation;
 
-    Statement(Var left, String operation, Var right) {
+
+
+    Statement(Var left, String operation, Var right) throws IllegalArgumentException {
         boolean us = false;
-        for(Operation op: values()){
-            if(operation.equals(op.toString())){
+        for (Operation op : values()) {
+            if (operation.equals(op.toString())) {
                 this.operation = op;
                 us = true;
             }
@@ -26,18 +35,11 @@ public class Statement {
         this.right = right;
     }
 
-
-    public String toString() {
-        switch (operation) {
-            case GREAT_THAN:
-                return left.toString() + ": {$gt: " + right.toString() + "}";
-            case LESS_THAN:
-                return left.toString() + ": {$lt: " + right.toString() + "}";
-            case NOT_EQUAL:
-                return left.toString() + ": {$ne: " + right.toString() + "}";
-            default:
-                return left.toString() + ": " + right.toString();
-        }
+    /**
+     * Purpose: Возвращает условное выражение в MongoDB формате
+     */
+    public String toMongoDB() {
+        return left.toString() + ": {" + operation.toMongoDB() + ": " + right.toString() + "}";
     }
 }
 
