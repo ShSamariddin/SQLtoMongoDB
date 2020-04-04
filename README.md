@@ -1,15 +1,52 @@
 # SQLToMongoDB
-На Java или Kotlin напишите мини-версию транслятора из SQL в команды MongoDB shell. ​
+### Задание
 
-Транслятор на вход получает строку с SQL запросом и отдает строку с командой MongoDB. Пример SELECT * FROM sales LIMIT 10 -> db.sales.find({}).limit(10) ​
+**На Java или Kotlin напишите мини-версию транслятора из 
+SQL в команды MongoDB shell.**
 
-* Достаточно поддержать только SELECT-запросы
-* Список колонок в SELECT должен быть транслирован в projection команды find: SELECT name, surname FROM collection -> db.collection.find({}, {name: 1, surname: 1})
-* OFFSET и LIMIT транслируются в соответствующие функции MongoDB курсоров: SELECT * FROM collection OFFSET 5 LIMIT 10 -> db.collection.find({}).skip(5).limit(10)
-* Предикаты в WHERE превращаются в предикаты команды find: SELECT * FROM customers WHERE age > 22 AND name = 'Vasya' -> db.customers.find({age: {$gt: 22}, name: 'Vasya'}). Реализуйте только операции сравнения: = <> < >. Если предикатов несколько, то они соединены операцией AND ​
-* Не забудьте написать тесты.
+Транслятор на вход получает строку с SQL запросом и отдает 
+строку с командой MongoDB. 
 
-​
-Edit 1: ключевое слово SKIP было заменено на общепринятое OFFSET. Я зачту оба варианта.
+*Пример: SELECT * FROM sales LIMIT 10 -> db.sales.find({}).limit(10)*
 
-​Edit 2: уточнено задание для WHERE: предикатов может быть несколько, они соединены операцией AND. Если вы учитывали только один предикат, это тоже будет засчитано
+**Формат SQL запроса**
+
+SELECT  arg_1,arg_2,...,arg_n  FROM  table_name  WHERE  cond_1 and cond_2 and .... and cond_n  LIMIT  number  OFFSET  number
+
+**conditional_expression**
+
+Это выражение вида
+1. arg_1 > arg_2
+2. arg_1 < arg_2
+3. arg_1 <> arg_2
+4. arg_1 = arg_2
+
+**Операторы и порядок их следования**
+1. SELECT
+2. FROM
+3. WHERE (если есть)
+4. LIMIT (если есть)
+5. OFFSET (если есть)
+
+**Допустимые символы для названий калонок и таблиц**
+1. большые и маленкие буквы латинского алфавита 
+2. знак нижнего подчеркивания
+3. цифры
+
+**Требование задания**
+1. Достаточно поддержать только SELECT-запросы
+2. Список колонок в SELECT должен быть транслирован в 
+projection команды find: SELECT name, surname FROM collection -> db.collection.find({}, {name: 1, surname: 1, _id: 0})
+3. OFFSET и LIMIT транслируются в соответствующие функции MongoDB курсоров: SELECT * FROM collection OFFSET 5 LIMIT 10 -> db.collection.find({}).skip(5).limit(10)
+4. Предикаты в WHERE превращаются в предикаты команды find: SELECT * FROM customers WHERE age > 22 AND name = 'Vasya' -> db.customers.find({age: {$gt: 22}, name: 'Vasya'}). 
+   Реализуйте только операции сравнения: = <> < >. Если предикатов несколько, то они соединены операцией AND ​
+5. Уточнено задание для WHERE: предикатов может быть несколько, они соединены операцией AND. Если вы учитывали только один предикат, это тоже будет засчитано.
+
+**Добавленные мною возможности**
+1. Если название колонок,таблицы или что то еще совпало
+с названием оператора(SELECT, FROM, ...) то их надо взять в обертку('', "", []).
+2. Проверка sql выражения на валидность.
+3. В MongoDB метод find всегда возращает калонку _id, 
+пока мы явно не укажем  _id: 0 - чтобы калонка _id не вывелось. Поэтому мой транслятор парсит использование калонки _id особым образом.
+
+

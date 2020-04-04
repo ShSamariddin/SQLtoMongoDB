@@ -18,7 +18,7 @@ public class ParserTest {
         }
 
         sql = "SELECT name, surname FROM [collection]";
-        mongoDB = "db.collection.find({}, {name: 1, surname: 1})";
+        mongoDB = "db.collection.find({}, {name: 1, surname: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -52,7 +52,7 @@ public class ParserTest {
     @Test
     public void hardTest() {
         String sql = "SELECT name, [FROM] FROM collection";
-        String mongoDB = "db.collection.find({}, {name: 1, FROM: 1})";
+        String mongoDB = "db.collection.find({}, {name: 1, FROM: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -62,7 +62,7 @@ public class ParserTest {
         }
 
         sql = "SELECT name, \"FROM\" FROM collection";
-        mongoDB = "db.collection.find({}, {name: 1, FROM: 1})";
+        mongoDB = "db.collection.find({}, {name: 1, FROM: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -72,7 +72,7 @@ public class ParserTest {
         }
 
         sql = "SELECT name, 'FROM' FROM collection";
-        mongoDB = "db.collection.find({}, {name: 1, FROM: 1})";
+        mongoDB = "db.collection.find({}, {name: 1, FROM: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -83,7 +83,7 @@ public class ParserTest {
 
 
         sql = "SELECT name_surname_2 FROM collection";
-        mongoDB = "db.collection.find({}, {name_surname_2: 1})";
+        mongoDB = "db.collection.find({}, {name_surname_2: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -152,7 +152,7 @@ public class ParserTest {
     @Test
     public void wrapperTest(){
         String sql = "SELECT [SELECT], [from], 'FROM' ,'select', \"SELECT\", \"FROM\"   FROM [from]";
-        String mongoDB = "db.from.find({}, {SELECT: 1, from: 1, FROM: 1, select: 1, SELECT: 1, FROM: 1})";
+        String mongoDB = "db.from.find({}, {SELECT: 1, from: 1, FROM: 1, select: 1, SELECT: 1, FROM: 1, _id: 0})";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -162,7 +162,7 @@ public class ParserTest {
         }
 
         sql = "SELECT [SELECT], name, 'FROM' ,'LIMIT', \"SELECT\", \"OFFSET\"   FROM [from] WHERE time > 20 LIMIT 10 OFFSET 2";
-        mongoDB = "db.from.find({time: {$gt: 20}}, {SELECT: 1, name: 1, FROM: 1, LIMIT: 1, SELECT: 1, OFFSET: 1}).skip(2).limit(10)";
+        mongoDB = "db.from.find({time: {$gt: 20}}, {SELECT: 1, name: 1, FROM: 1, LIMIT: 1, SELECT: 1, OFFSET: 1, _id: 0}).skip(2).limit(10)";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -175,7 +175,7 @@ public class ParserTest {
     @Test
     public void  whereOperationTest(){
         String sql = "SELECT name FROM collection WHERE age > 22 AND sex <> MEN AND weight = 80 AND height < 200 AND name = 'Vasya' LIMIT 10 OFFSET 5";
-        String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}, weight: {$eq: 80}, height: {$lt: 200}, name: {$eq: 'Vasya'}}, {name: 1}).skip(5).limit(10)";
+        String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}, weight: {$eq: 80}, height: {$lt: 200}, name: {$eq: 'Vasya'}}, {name: 1, _id: 0}).skip(5).limit(10)";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -189,7 +189,7 @@ public class ParserTest {
     @Test
     public  void selectOperationTest(){
         String sql = "SELECT name, name2, nick_name_2, surname FROM collection WHERE age > 22 AND sex <> MEN  LIMIT 10 OFFSET 5";
-        String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}}, {name: 1, name2: 1, nick_name_2: 1, surname: 1}).skip(5).limit(10)";
+        String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}}, {name: 1, name2: 1, nick_name_2: 1, surname: 1, _id: 0}).skip(5).limit(10)";
         try {
             Converter converter = new Converter(sql);
             assertEquals(mongoDB, converter.convertToMongoDB());
@@ -199,6 +199,39 @@ public class ParserTest {
         }
     }
 
+
+    public void idTest(){
+        String sql = "SELECT name, surname, _id FROM [collection]";
+        String mongoDB = "db.collection.find({}, {name: 1, surname: 1, _id: 1})";
+        try {
+            Converter converter = new Converter(sql);
+            assertEquals(mongoDB, converter.convertToMongoDB());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        sql = "SELECT name, surname FROM [collection]";
+        mongoDB = "db.collection.find({}, {name: 1, surname: 1, _id: 0})";
+        try {
+            Converter converter = new Converter(sql);
+            assertEquals(mongoDB, converter.convertToMongoDB());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        sql = "SELECT * FROM [collection]";
+        mongoDB = "db.collection.find({})";
+        try {
+            Converter converter = new Converter(sql);
+            assertEquals(mongoDB, converter.convertToMongoDB());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+    }
 
 
 

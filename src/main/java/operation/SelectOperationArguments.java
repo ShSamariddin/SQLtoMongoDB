@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 public class    SelectOperationArguments extends OperationArguments {
     ArrayList<Var> listArguments = new ArrayList<>();
+    boolean hasId = false;
 
 
     /**
@@ -46,7 +47,13 @@ public class    SelectOperationArguments extends OperationArguments {
         if (listArguments.size() != 0) {
             ans.append(", {");
             for (Var arg : listArguments) {
+                if(arg.toString().equals("_id")){
+                    hasId = true;
+                }
                 ans.append(arg.toString()).append(": 1, ");
+            }
+            if(!hasId){
+                ans.append("_id").append(": 0, ");
             }
             ans.deleteCharAt(ans.length() - 1);
             ans.deleteCharAt(ans.length() - 1);

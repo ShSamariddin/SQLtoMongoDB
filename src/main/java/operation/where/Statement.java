@@ -42,3 +42,6 @@ public class Statement {
     }
 }
 
+//select name, price from store -->  db.store.find({}, {name: 1, price: 1, _id: 0}
+//select name, price, _id from store -->  db.store.find({}, {name: 1, price: 1, _id: 1})
+//select _id from store -->  db.store.find({}, {_id: 1})
