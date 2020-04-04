@@ -1,4 +1,4 @@
-package where;
+package operation.where;
 
 import parser.Var;
 
@@ -19,8 +19,8 @@ public class WhereOperationArgument {
     /**
      * Purpose: Создает объект условного выражения из sql строки
      *
-     * @param row
-     * @throws IllegalArgumentException
+     * @param row - строка содержащая  аргументы оператора WHERE
+     * @throws IllegalArgumentException - выкидывает  если условии записано в неправильном формате
      */
     public WhereOperationArgument(String row) throws IllegalArgumentException {
         StringBuilder statement = new StringBuilder();

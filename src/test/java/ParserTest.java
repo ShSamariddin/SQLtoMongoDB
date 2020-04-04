@@ -1,4 +1,5 @@
 import org.junit.Test;
+import parser.Converter;
 
 import static org.junit.Assert.*;
 
@@ -36,7 +37,7 @@ public class ParserTest {
             fail();
         }
 
-        sql = "SELECT * FROM collection OFFSET 5 LIMIT 10";
+        sql = "SELECT * FROM collection  LIMIT 10 OFFSET 5";
         mongoDB = "db.collection.find({}).skip(5).limit(10)";
         try {
             Converter converter = new Converter(sql);
@@ -173,7 +174,7 @@ public class ParserTest {
 
     @Test
     public void  whereOperationTest(){
-        String sql = "SELECT name FROM collection WHERE age > 22 AND sex <> MEN AND weight = 80 AND height < 200 AND name = 'Vasya'  OFFSET 5 LIMIT 10";
+        String sql = "SELECT name FROM collection WHERE age > 22 AND sex <> MEN AND weight = 80 AND height < 200 AND name = 'Vasya' LIMIT 10 OFFSET 5";
         String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}, weight: {$eq: 80}, height: {$lt: 200}, name: {$eq: 'Vasya'}}, {name: 1}).skip(5).limit(10)";
         try {
             Converter converter = new Converter(sql);
@@ -187,7 +188,7 @@ public class ParserTest {
 
     @Test
     public  void selectOperationTest(){
-        String sql = "SELECT name, name2, nick_name_2, surname FROM collection WHERE age > 22 AND sex <> MEN  OFFSET 5 LIMIT 10";
+        String sql = "SELECT name, name2, nick_name_2, surname FROM collection WHERE age > 22 AND sex <> MEN  LIMIT 10 OFFSET 5";
         String mongoDB = "db.collection.find({age: {$gt: 22}, sex: {$ne: MEN}}, {name: 1, name2: 1, nick_name_2: 1, surname: 1}).skip(5).limit(10)";
         try {
             Converter converter = new Converter(sql);

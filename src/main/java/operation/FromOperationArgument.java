@@ -1,3 +1,5 @@
+package operation;
+
 import parser.Var;
 
 /**
@@ -14,8 +16,8 @@ public class FromOperationArgument extends OperationArguments {
      * Purpose:  Удаляет обвертку из аргумента если она есть, проверяет на валидность
      * все символы и создаёт новый объект хранящий аргумент операции FROM
      *
-     * @param str
-     * @throws IllegalArgumentException
+     * @param str - строка содержащее  название таблицы
+     * @throws IllegalArgumentException - выкидывает когда название таблицы не соответствует стандарту
      */
     public FromOperationArgument(String str) throws IllegalArgumentException {
         this.arg = new Var(removeWrapper(str));

@@ -1,8 +1,7 @@
-package where;
+package operation.where;
 
 import parser.Var;
 
-import static where.Operation.*;
 
 /**
  * CLass Statement
@@ -21,7 +20,7 @@ public class Statement {
 
     Statement(Var left, String operation, Var right) throws IllegalArgumentException {
         boolean us = false;
-        for (Operation op : values()) {
+        for (Operation op : Operation.values()) {
             if (operation.equals(op.toString())) {
                 this.operation = op;
                 us = true;

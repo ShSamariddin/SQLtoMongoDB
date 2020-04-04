@@ -12,12 +12,13 @@ public class Var {
     private final String arg;
 
     /**
-     * Purpose: Проверка аргумента на валидность
+     * Purpose: Создает новый объект из входной строки  если она валидная
      *
-     * @param var
-     * @return создает новый объект из входной строки  если она валидная
+     * @param var - название колонки, таблицы или  переменные
+     *
      * иначе выкидывает ошибку
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException - выдает ошибку если название колонки,таблицы или переменные
+     * из условии WHERE не соответствует формату
      */
     public Var(String var) {
         if (!isValidVariable(var)) {
@@ -29,7 +30,7 @@ public class Var {
     /**
      * Purpose: Проверка аргумента на валидность
      *
-     * @param var
+     * @param var - аргумент  который надо проверит на валидность
      */
     private boolean isValidVariable(String var) {
         for (char c : var.toCharArray()) {
@@ -43,7 +44,7 @@ public class Var {
     /**
      * Purpose: Проверка символа на валидность
      *
-     * @param c
+     * @param c - символ которое проверяется на валидность
      */
     private boolean isValidSymbol(char c) {
         return (c == '\'' || c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));

@@ -1,4 +1,4 @@
-###SQLToMongoDB
+# SQLToMongoDB
 На Java или Kotlin напишите мини-версию транслятора из SQL в команды MongoDB shell. ​
 
 Транслятор на вход получает строку с SQL запросом и отдает строку с командой MongoDB. Пример SELECT * FROM sales LIMIT 10 -> db.sales.find({}).limit(10) ​

@@ -1,3 +1,5 @@
+package operation;
+
 import parser.Var;
 
 import java.util.ArrayList;
@@ -10,15 +12,15 @@ import java.util.ArrayList;
  * Purpose: Класс для хранения  аргументов оператора SELECT
  */
 
-public class SelectOperationArguments extends OperationArguments {
+public class    SelectOperationArguments extends OperationArguments {
     ArrayList<Var> listArguments = new ArrayList<>();
 
 
     /**
      * Purpose: Разделяет запятыми и хранит все аргументы в ArrayList
      *
-     * @param args
-     * @throws IllegalArgumentException
+     * @param args - строка содержащая название колонок
+     * @throws IllegalArgumentException - выкидывает когда  колонки записаны в неверном формате
      */
     public SelectOperationArguments(String args) throws IllegalArgumentException {
         args = args.replaceAll(" ", "");

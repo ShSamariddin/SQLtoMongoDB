@@ -1,3 +1,5 @@
+package operation;
+
 /**
  * CLass OperationArguments
  * <p>
@@ -11,7 +13,7 @@ public class OperationArguments {
     /**
      * Purpose: Удаляет обертку аргумента
      *
-     * @param str
+     * @param str - строка у которой надо убрать обертку
      * @return Возвращает аргумент без обертки
      */
     protected String removeWrapper(String str) {

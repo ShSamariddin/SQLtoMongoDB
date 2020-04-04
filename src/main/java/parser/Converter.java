@@ -1,8 +1,11 @@
-import parser.*;
+package parser;
+
 
 import static parser.Token.*;
 
-import where.WhereOperationArgument;
+import operation.FromOperationArgument;
+import operation.SelectOperationArguments;
+import operation.where.WhereOperationArgument;
 
 
 import java.util.HashMap;
@@ -16,36 +19,35 @@ import java.util.HashMap;
  */
 
 public class Converter {
-   // private Parser lex;
     private String sqlExpression;
     HashMap<Token, String> mongoDB = new HashMap<>();
-    HashMap<Token, String> sqlMap = new HashMap<>();
 
     /**
      * Purpose: Создаёт новый объект конвертер из SQL выражения
      *
-     * @param sqlExpression
+     * @param sqlExpression - SQL выражение
      */
     public Converter(String sqlExpression) {
         this.sqlExpression = sqlExpression;
     }
 
     /**
-     * purpose: сопоставляет каждому оператору ее аналог  в MongoDB формате
-     * и добавляем в HashMap
-     * <p>
-     * Returns: none
+     * Purpose: разделяет выражение на SQL оператор и его аргумент
+     *
+     * @param sql- SQL выражение
+     *
+     * @throws IllegalArgumentException - выкидывает ошибку если выражение не соответствует стандарту
      */
-    private void addToSQLHashMap(String sql){
+    private void addToSQLHashMap(String sql) throws IllegalArgumentException {
         boolean firstRound = true;
         Token preToken = Token.SELECT;
-        for(Token token: Token.values()){
-            if(sql.contains(token.toString())){
+        for (Token token : Token.values()) {
+            if (sql.contains(token.toString())) {
                 String[] arg = sql.split(token.toString() + " ");
-                if(arg.length != 2){
-                    throw  new IllegalArgumentException();
-                } else if(!firstRound){
-                    addToMongoDBHashMap(preToken, removeSpaces(arg[0]));
+                if (arg.length != 2) {
+                    throw new IllegalArgumentException();
+                } else if (!firstRound) {
+                    addToMongoDBHashMap(preToken, arg[0].trim());
                 }
                 sql = arg[1];
                 firstRound = false;
@@ -53,23 +55,18 @@ public class Converter {
             }
         }
 
-        addToMongoDBHashMap(preToken, removeSpaces(sql));
+        addToMongoDBHashMap(preToken, sql.trim());
     }
 
-    private String removeSpaces(String str){
-        StringBuilder sql = new StringBuilder(str);
-        while(sql.length() > 0 && sql.charAt(0) == ' '){
-            sql.deleteCharAt(0);
-        }
-
-        while (sql.length() > 0 && sql.charAt(sql.length() - 1) == ' '){
-            sql.deleteCharAt(sql.length() - 1);
-        }
-        return sql.toString();
-    }
-
-    private void addToMongoDBHashMap(Token curToken, String tokenArgument ) {
-        tokenArgument = tokenArgument.trim();
+    /**
+     * purpose: сопоставляет каждому оператору ее аналог  в MongoDB формате
+     * и добавляем в HashMap
+     *
+     * @param curToken - текущий  SQL оператор
+     * @param tokenArgument - аргумент текущего оператора
+     * @throws IllegalArgumentException - выкидывает ошибку если выражение не соответствует стандарту
+     */
+    private void addToMongoDBHashMap(Token curToken, String tokenArgument) throws IllegalArgumentException {
         switch (curToken) {
             case SELECT:
                 SelectOperationArguments select = new SelectOperationArguments(tokenArgument);
@@ -94,10 +91,13 @@ public class Converter {
         }
     }
 
+
+
     /**
      * purpose: Конвертирует выражение из SQL в MonogoDB
-     * <p>
-     * Returns: MongoDB выражение в виде строки
+     *
+     * @return MongoDB выражение в виде строки
+     * @throws IllegalArgumentException - выкидовает ошибку если SQL вырадение не соответсвует стандарту
      */
 
     public String convertToMongoDB() throws IllegalArgumentException {
