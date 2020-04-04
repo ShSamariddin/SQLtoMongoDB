@@ -21,7 +21,6 @@ public class FromOperationArgument extends OperationArguments {
         this.arg = new Var(removeWrapper(str));
     }
 
-
     public String toString() {
         return arg.toString();
     }

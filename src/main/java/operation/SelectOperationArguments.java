@@ -21,6 +21,10 @@ public class SelectOperationArguments extends OperationArguments {
      * @throws IllegalArgumentException
      */
     public SelectOperationArguments(String args) throws IllegalArgumentException {
+        args = args.replaceAll(" ", "");
+        if(args.length() == 0 || args.charAt(0) == ',' || args.charAt(args.length() -  1) == ','){
+            throw  new IllegalArgumentException("SELECT has an invalid argument");
+        }
         String[] argList = args.split(",");
         if (argList.length > 1 || (argList.length == 1 && !argList[0].equals("*"))) {
             for (String s : argList) {
