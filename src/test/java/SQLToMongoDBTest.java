@@ -3,7 +3,7 @@ import parser.Converter;
 
 import static org.junit.Assert.*;
 
-public class ParserTest {
+public class SQLToMongoDBTest {
 
     @Test
     public void simpleTest() {

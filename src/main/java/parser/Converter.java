@@ -81,12 +81,10 @@ public class Converter {
                 mongoDB.put(curToken, where.toMongoDB());
                 break;
             case LIMIT:
-                Integer.parseInt(tokenArgument);
-                mongoDB.put(curToken, ".limit(" + tokenArgument + ")");
+                mongoDB.put(curToken, ".limit(" + Integer.parseInt(tokenArgument) + ")");
                 break;
             case OFFSET:
-                Integer.parseInt(tokenArgument);
-                mongoDB.put(curToken, ".skip(" + tokenArgument + ')');
+                mongoDB.put(curToken, ".skip(" + Integer.parseInt(tokenArgument)+ ')');
                 break;
         }
     }
