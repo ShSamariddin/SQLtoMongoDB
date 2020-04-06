@@ -199,7 +199,7 @@ public class SQLToMongoDBTest {
         }
     }
 
-
+    @Test
     public void idTest(){
         String sql = "SELECT name, surname, _id FROM [collection]";
         String mongoDB = "db.collection.find({}, {name: 1, surname: 1, _id: 1})";
